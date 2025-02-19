@@ -2,7 +2,8 @@
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
     id("kotlin-kapt")
-}
+        alias(libs.plugins.google.gms.google.services)
+    }
 
 android {
     namespace = "com.example.app"
@@ -57,7 +58,8 @@ dependencies {
     implementation("androidx.compose.ui:ui:1.5.0") // Make sure this is the correct version
     implementation("androidx.compose.material:material:1.5.0")
     implementation("androidx.compose.ui:ui-tooling-preview:1.5.0")
-    implementation("androidx.compose.runtime:runtime:1.5.0") // Add this line
+    implementation("androidx.compose.runtime:runtime:1.5.0")
+    implementation(libs.firebase.database) // Add this line
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)

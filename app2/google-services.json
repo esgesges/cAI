@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "416840320294",
+    "project_id": "clndrai",
+    "storage_bucket": "clndrai.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:416840320294:android:0e601f2a49ea90f75f2de7",
+        "android_client_info": {
+          "package_name": "com.example.app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCroO1r8fyC4TggcY7fwu-WMQo8kRt91xY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -163,7 +163,7 @@
         app:layout_constraintTop_toBottomOf="@+id/title" />
 
     <EditText
-        android:id="@+id/editTextText3"
+        android:id="@+id/remTxt"
         android:layout_width="371dp"
         android:layout_height="48dp"
         android:layout_marginStart="16dp"
@@ -189,7 +189,7 @@
         android:textColor="@color/white"
         app:layout_constraintEnd_toStartOf="@+id/inMonth"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editTextText3" />
+        app:layout_constraintTop_toBottomOf="@+id/remTxt" />
 
     <EditText
         android:id="@+id/inMonth"
@@ -202,7 +202,7 @@
         android:textColor="@color/white"
         app:layout_constraintEnd_toStartOf="@+id/inDay"
         app:layout_constraintStart_toEndOf="@+id/inYear"
-        app:layout_constraintTop_toBottomOf="@+id/editTextText3" />
+        app:layout_constraintTop_toBottomOf="@+id/remTxt" />
 
     <EditText
         android:id="@+id/inDay"
@@ -215,7 +215,7 @@
         android:textColor="@color/white"
         app:layout_constraintEnd_toStartOf="@+id/inHour"
         app:layout_constraintStart_toEndOf="@+id/inMonth"
-        app:layout_constraintTop_toBottomOf="@+id/editTextText3" />
+        app:layout_constraintTop_toBottomOf="@+id/remTxt" />
 
     <EditText
         android:id="@+id/inHour"
@@ -228,7 +228,7 @@
         android:textColor="@color/white"
         app:layout_constraintEnd_toStartOf="@+id/inMin"
         app:layout_constraintStart_toEndOf="@+id/inDay"
-        app:layout_constraintTop_toBottomOf="@+id/editTextText3" />
+        app:layout_constraintTop_toBottomOf="@+id/remTxt" />
 
     <EditText
         android:id="@+id/inMin"
@@ -242,7 +242,7 @@
         android:textColor="@color/white"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/inHour"
-        app:layout_constraintTop_toBottomOf="@+id/editTextText3" />
+        app:layout_constraintTop_toBottomOf="@+id/remTxt" />
 
     <TextView
         android:id="@+id/output"
@@ -254,7 +254,6 @@
         android:layout_marginBottom="19dp"
         android:paddingLeft="50px"
         android:paddingTop="50px"
-        android:text="output"
         app:layout_constraintBottom_toTopOf="@+id/button5"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
