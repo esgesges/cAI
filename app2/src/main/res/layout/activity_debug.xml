@@ -42,7 +42,6 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:backgroundTint="#000000"
                 android:text="Chat" />
 
             <Button
@@ -51,6 +50,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:layout_marginLeft="10dp"
+                android:backgroundTint="#000000"
                 android:text="Settings" />
 
         </LinearLayout>
@@ -69,7 +69,7 @@
         app:layout_constraintBottom_toTopOf="@+id/cardView3"
         app:layout_constraintEnd_toStartOf="@+id/delbtn"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/button4" />
+        app:layout_constraintTop_toBottomOf="@+id/modBtn" />
 
     <Button
         android:id="@+id/delbtn"
@@ -99,13 +99,13 @@
         app:layout_constraintTop_toBottomOf="@+id/button6" />
 
     <Button
-        android:id="@+id/button4"
+        android:id="@+id/modBtn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="15dp"
         android:layout_marginTop="503dp"
         android:layout_marginEnd="15dp"
-        android:text="Button"
+        android:text="Modify"
         app:layout_constraintEnd_toStartOf="@+id/button5"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -117,7 +117,7 @@
         android:layout_marginTop="500dp"
         android:text="Button"
         app:layout_constraintEnd_toStartOf="@+id/button6"
-        app:layout_constraintStart_toEndOf="@+id/button4"
+        app:layout_constraintStart_toEndOf="@+id/modBtn"
         app:layout_constraintTop_toTopOf="parent" />
 
     <Button
@@ -141,9 +141,25 @@
         android:layout_marginEnd="22dp"
         android:ems="10"
         android:inputType="text"
-        android:text="title"
-        android:textColor="@color/white"
+        android:hint="title"
+        android:textColorHint="@color/white"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <EditText
+        android:id="@+id/idIn"
+        android:layout_width="371dp"
+        android:layout_height="48dp"
+        android:layout_marginStart="18dp"
+        android:layout_marginTop="348dp"
+        android:layout_marginEnd="22dp"
+        android:ems="10"
+        android:hint="id"
+        android:inputType="text"
+        android:textColorHint="@color/white"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -156,8 +172,8 @@
         android:layout_marginEnd="24dp"
         android:ems="10"
         android:inputType="text"
-        android:text="description"
-        android:textColor="@color/white"
+        android:hint="description"
+        android:textColorHint="@color/white"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/title" />
@@ -172,7 +188,7 @@
         android:ems="10"
         android:inputType="text"
         android:text="Name"
-        android:textColor="@color/white"
+        android:textColorHint="@color/white"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/desc" />
@@ -185,8 +201,8 @@
         android:layout_marginTop="35dp"
         android:ems="10"
         android:inputType="text"
-        android:text="year"
-        android:textColor="@color/white"
+        android:hint="year"
+        android:textColorHint="@color/white"
         app:layout_constraintEnd_toStartOf="@+id/inMonth"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/remTxt" />
@@ -198,8 +214,8 @@
         android:layout_marginTop="35dp"
         android:ems="10"
         android:inputType="text"
-        android:text="month"
-        android:textColor="@color/white"
+        android:hint="month"
+        android:textColorHint="@color/white"
         app:layout_constraintEnd_toStartOf="@+id/inDay"
         app:layout_constraintStart_toEndOf="@+id/inYear"
         app:layout_constraintTop_toBottomOf="@+id/remTxt" />
@@ -211,8 +227,8 @@
         android:layout_marginTop="35dp"
         android:ems="10"
         android:inputType="text"
-        android:text="day"
-        android:textColor="@color/white"
+        android:hint="day"
+        android:textColorHint="@color/white"
         app:layout_constraintEnd_toStartOf="@+id/inHour"
         app:layout_constraintStart_toEndOf="@+id/inMonth"
         app:layout_constraintTop_toBottomOf="@+id/remTxt" />
@@ -224,8 +240,8 @@
         android:layout_marginTop="35dp"
         android:ems="10"
         android:inputType="text"
-        android:text="hour"
-        android:textColor="@color/white"
+        android:hint="hour"
+        android:textColorHint="@color/white"
         app:layout_constraintEnd_toStartOf="@+id/inMin"
         app:layout_constraintStart_toEndOf="@+id/inDay"
         app:layout_constraintTop_toBottomOf="@+id/remTxt" />
@@ -238,25 +254,10 @@
         android:layout_marginEnd="49dp"
         android:ems="10"
         android:inputType="text"
-        android:text="min"
-        android:textColor="@color/white"
+        android:hint="min"
+        android:textColorHint="@color/white"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/inHour"
         app:layout_constraintTop_toBottomOf="@+id/remTxt" />
-
-    <TextView
-        android:id="@+id/output"
-        android:layout_width="343dp"
-        android:layout_height="148dp"
-        android:layout_marginStart="34dp"
-        android:layout_marginTop="17dp"
-        android:layout_marginEnd="34dp"
-        android:layout_marginBottom="19dp"
-        android:paddingLeft="50px"
-        android:paddingTop="50px"
-        app:layout_constraintBottom_toTopOf="@+id/button5"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/inYear" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
