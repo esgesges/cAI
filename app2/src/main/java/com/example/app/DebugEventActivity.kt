@@ -15,7 +15,7 @@ import com.google.firebase.database.ValueEventListener
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers.Main
 
-internal class DebugActivity : AppCompatActivity(), View.OnClickListener {
+internal class DebugEventActivity : AppCompatActivity(), View.OnClickListener {
     private val output: TextView? = null
     private val coroutineScope: CoroutineScope = CoroutineScope(Main)
 
@@ -33,7 +33,7 @@ internal class DebugActivity : AppCompatActivity(), View.OnClickListener {
             startActivity(
                 Intent(
                     this,
-                    MainActivity::class.java
+                    DebugLayoutActivity::class.java
                 )
             )
         }

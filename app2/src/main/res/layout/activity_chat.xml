@@ -7,47 +7,6 @@
     android:layout_height="match_parent"
     android:background="#181717">
 
-    <!-- Main Content Card
-    <androidx.cardview.widget.CardView
-        android:id="@+id/chatOUT"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:layout_margin="15dp"
-        android:layout_marginStart="397dp"
-        android:layout_marginTop="717dp"
-        android:layout_marginEnd="396dp"
-        android:layout_marginBottom="612dp"
-        android:backgroundTint="#1f1d1d"
-        android:padding="16dp"
-        app:cardCornerRadius="16dp"
-        app:cardElevation="4dp"
-        app:layout_constraintBottom_toTopOf="@+id/cardView3"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_weight="1">
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="#1f1d1d"
-            android:orientation="vertical">
-
-            <TextView
-                android:id="@+id/response"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:background="#1f1d1d"
-                android:hint="chat"
-                android:paddingLeft="30dp"
-                android:paddingTop="20dp"
-                android:textColorHint="#ffffff"
-                android:textSize="16sp" />
-        </LinearLayout>
-
-    </androidx.cardview.widget.CardView>
--->
     <androidx.cardview.widget.CardView
         android:id="@+id/cardView5"
         android:layout_width="match_parent"

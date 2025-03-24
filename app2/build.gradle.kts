@@ -61,7 +61,8 @@ dependencies {
     implementation("androidx.compose.runtime:runtime:1.5.0")
     implementation(libs.firebase.database)
     implementation(libs.play.services.base)
-    implementation(libs.play.services.base) // Add this line
+    implementation(libs.play.services.base)
+    implementation(libs.androidx.legacy.support.v4) // Add this line
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)

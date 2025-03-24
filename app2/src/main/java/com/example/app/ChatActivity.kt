@@ -1,6 +1,5 @@
 package com.example.app
 
-import com.example.app.*
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
@@ -48,7 +47,7 @@ class ChatActivity : AppCompatActivity() {
         }
 
         optbtn.setOnClickListener {
-            val nextPage = Intent(this, DebugActivity::class.java)
+            val nextPage = Intent(this, DebugEventActivity::class.java)
             startActivity(nextPage)
         }
 
@@ -70,7 +69,7 @@ class ChatActivity : AppCompatActivity() {
                     try {
                         // Parse the JSON response
                         val jsonObject = JSONObject(responseText)
-                        val action = jsonObject.optString("action", "N/A")
+                        val action = jsonObject.optString("toolName", "N/A")
                         val id = jsonObject.optString("id", "N/A")
                         val title = jsonObject.optString("title", "N/A")
                         val description = jsonObject.optString("description", "N/A")

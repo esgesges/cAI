@@ -30,7 +30,12 @@
             android:exported="true">
         </activity>
         <activity
-            android:name=".DebugActivity"
+            android:name=".DebugEventActivity"
+            android:exported="true">
+
+        </activity>
+        <activity
+            android:name=".DebugLayoutActivity"
             android:exported="true">
         </activity>
     </application>
