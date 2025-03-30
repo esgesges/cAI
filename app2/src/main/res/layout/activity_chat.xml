@@ -61,11 +61,10 @@
         app:layout_constraintTop_toTopOf="parent"
         >
 
-
-        <LinearLayout
+        <ScrollView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="#181717">
+            android:background="#202020">
 
             <TextView
                 android:id="@+id/aiOutput"
@@ -73,11 +72,9 @@
                 android:layout_height="match_parent"
                 android:background="#202020"
                 android:paddingStart="20dp"
-                android:paddingTop="20dp"
+                android:paddingBottom="20dp"
                 android:textColor="#FFFFFF" />
-
-
-        </LinearLayout>
+        </ScrollView>
 
     </androidx.cardview.widget.CardView>
     <!-- Bottom Navigation Card -->

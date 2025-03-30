@@ -7,14 +7,12 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import org.json.JSONException
-import org.json.JSONObject
+import android.content.SharedPreferences
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.RequestBody.Companion.toRequestBody
 import okhttp3.ResponseBody
+import org.json.JSONException
+import org.json.JSONObject
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -26,87 +24,70 @@ class ChatActivity : AppCompatActivity() {
     private lateinit var sendBtn: Button
     private lateinit var output: TextView
     private lateinit var input: EditText
-    val firebaseDB = FirebaseDB()
+    private lateinit var sharedPreferences: SharedPreferences
+    private val CHAT_PREFS = "ChatPrefs"
+    private val CHAT_KEY = "chatMessages"
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_chat)
 
-        // Initialize the views after setContentView
+        // Initialize SharedPreferences
+        sharedPreferences = getSharedPreferences(CHAT_PREFS, MODE_PRIVATE)
+
+        // Initialize UI elements
         homebtn = findViewById(R.id.homebtn)
         optbtn = findViewById(R.id.optbtn)
         sendBtn = findViewById(R.id.sendBtn)
         output = findViewById(R.id.aiOutput)
         input = findViewById(R.id.aiInput)
 
+        // Display saved chat messages when the activity is created
+        displaySavedChat()
 
-
+        // Home button click
         homebtn.setOnClickListener {
             val nextPage = Intent(this, MainActivity::class.java)
             startActivity(nextPage)
         }
 
+        // Options button click
         optbtn.setOnClickListener {
             val nextPage = Intent(this, DebugEventActivity::class.java)
             startActivity(nextPage)
         }
 
+        // Send button click
         sendBtn.setOnClickListener {
-            output.append("\n\n" + input.text.toString())
-            apiCall()
+            val userInput = input.text.toString().trim()
+            if (userInput.isNotEmpty()) {
+                val currentChat = loadChat()
+                val updatedChat = "$currentChat\n\nUser: $userInput"
+                saveChat(updatedChat) // Save chat
+
+                output.append("\n\nUser: $userInput") // Show user input in chat
+                apiCall(userInput) // Send request to the API
+            }
         }
     }
 
-    private fun apiCall() {
-        val query = input.text.toString()
-        val json = "{\"input\": \"$query\"}"
+    // API call to send user input
+    private fun apiCall(userQuery: String) {
+        val json = "{\"input\": \"$userQuery\"}"
         val requestBody = json.toRequestBody("application/json".toMediaTypeOrNull())
 
-        RetrofitClient.instance.sendQuery(requestBody)?.enqueue(object : Callback<ResponseBody> {
+        RetrofitClient.instance.manage(requestBody)?.enqueue(object : Callback<ResponseBody> {
             override fun onResponse(call: Call<ResponseBody>, response: Response<ResponseBody>) {
                 if (response.isSuccessful) {
                     val responseText = response.body()?.string() ?: "No response body"
                     try {
-                        // Parse the JSON response
-                        val jsonObject = JSONObject(responseText)
-                        val action = jsonObject.optString("toolName", "N/A")
-                        val id = jsonObject.optString("id", "N/A")
-                        val title = jsonObject.optString("title", "N/A")
-                        val description = jsonObject.optString("description", "N/A")
-                        val year = jsonObject.optInt("year", 0)
-                        val month = jsonObject.optInt("month", 0)
-                        val day = jsonObject.optInt("day", 0)
-                        val hour = jsonObject.optInt("hour", 0)
-                        val minutes = jsonObject.optInt("minutes", 0)
+                        Log.d("Response", "\n$responseText")
+                        // Append the response text to the chat
+                        val currentChat = loadChat()
+                        val updatedChat = "$currentChat\n\nWorker: $responseText"
+                        saveChat(updatedChat) // Save updated chat
 
-                        val result = """
-                                        Input: $query
-                                        Id: $id
-                                        Title: $title
-                                        Description: $description
-                                        Date: $year-$month-$day
-                                        Time: $hour:$minutes
-                                    """.trimIndent()
-
-                        Log.d("Response", result + "\n$responseText")
-                        output.append("\n" + result + "\n$responseText")
-                        when (action) {
-                            "addEvent" -> CoroutineScope(Dispatchers.IO).launch {
-                                val result = firebaseDB.addEvent(title, description, year, month, day, hour, minutes)
-                                runOnUiThread {
-                                }
-                            }
-                            "modifyEvent" -> CoroutineScope(Dispatchers.IO).launch {
-                                val result = firebaseDB.modifyEvent(id, title, description, year, month, day, hour, minutes)
-                                runOnUiThread {
-                                }
-                            }
-                            "deleteEvent" -> CoroutineScope(Dispatchers.IO).launch {
-                                val result = firebaseDB.deleteEvent(id)
-                                runOnUiThread {
-                                }
-                            }
-                        }
+                        output.append("\n\nWorker: $responseText") // Show worker response in chat
                     } catch (e: JSONException) {
                         Log.e("Parsing Error", "Failed to parse response: ${e.message}")
                         output.append("\nParsing Error: ${e.message}")
@@ -121,8 +102,26 @@ class ChatActivity : AppCompatActivity() {
             override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
                 val errorMsg = "Network error: ${t.message}"
                 Log.e("Failure", errorMsg)
-                output.append("\n" + errorMsg)
+                output.append("\n$errorMsg")
             }
         })
+    }
+
+    // Save the chat string in SharedPreferences
+    private fun saveChat(chat: String) {
+        val editor = sharedPreferences.edit()
+        editor.putString(CHAT_KEY, chat)
+        editor.apply()
+    }
+
+    // Load the chat string from SharedPreferences
+    private fun loadChat(): String {
+        return sharedPreferences.getString(CHAT_KEY, "") ?: ""
+    }
+
+    // Display the saved chat messages on the screen
+    private fun displaySavedChat() {
+        val savedChat = loadChat()
+        output.text = savedChat
     }
 }

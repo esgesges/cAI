@@ -30,6 +30,9 @@ import retrofit2.Response
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.RequestBody.Companion.toRequestBody
 import okhttp3.ResponseBody
+import org.json.JSONArray
+import org.json.JSONException
+import org.json.JSONObject
 
 class MainActivity : AppCompatActivity(), View.OnClickListener {
 
@@ -56,6 +59,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
         calendario.setOnDateChangeListener { _, year, month, dayOfMonth ->
             eventsContainer.removeAllViews() // Clear previous events
             getEventsByDate(year, month + 1, dayOfMonth) // Load events for the selected date
+//            getEventsByDate(year, month + 1, dayOfMonth) // Load events for the selected date
         }
 
         chatbtn.setOnClickListener {
@@ -69,36 +73,51 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
     }
 
     private fun getEventsByDate(year: Int, month: Int, day: Int) {
-        eventsRef.orderByChild("year")
-            .equalTo(year.toDouble())
-            .addListenerForSingleValueEvent(object : ValueEventListener {
-                override fun onDataChange(snapshot: DataSnapshot) {
-                    var foundEvent = false
+        val formattedDate = String.format("%04d-%02d-%02d", year, month, day) // Ensure correct format YYYY-MM-DD
 
-                    for (eventSnapshot in snapshot.children) {
-                        val eventMonth = eventSnapshot.child("month").getValue(Int::class.java) ?: 0
-                        val eventDay = eventSnapshot.child("day").getValue(Int::class.java) ?: 0
+        RetrofitClient.instance.getEventsByDate(formattedDate)?.enqueue(object : Callback<ResponseBody> {
+            override fun onResponse(call: Call<ResponseBody>, response: Response<ResponseBody>) {
+                if (!response.isSuccessful) {
+                    val errorBody = response.errorBody()?.string()
+                    Log.e("API Error", "Failed request. Status: ${response.code()} | Response: $errorBody")
+                    addEventToView("Error", "Failed to load events\nStatus: ${response.code()}", "")
+                    return
+                }
 
-                        if (eventMonth == month && eventDay == day) {
-                            val title = eventSnapshot.child("title").getValue(String::class.java) ?: "No Title"
-                            val description = eventSnapshot.child("description").getValue(String::class.java) ?: "No Description"
-                            val date = "$year-$month-$day"
-                            addEventToView(title, description, date)
-                            foundEvent = true
+                val responseText = response.body()?.string()
+                Log.d("API Response", "Received: $responseText")
+
+                if (responseText.isNullOrEmpty()) {
+                    addEventToView("No events", "", "")
+                    return
+                }
+
+                try {
+                    val eventsArray = JSONArray(responseText)
+
+                    if (eventsArray.length() == 0) {
+                        addEventToView("No events", "", "")
+                    } else {
+                        for (i in 0 until eventsArray.length()) {
+                            val event = eventsArray.getJSONObject(i)
+                            val title = event.optString("Titolo", "No Title")
+                            val description = event.optString("Descrizione", "No Description")
+                            val eventTime = event.optString("Ora", "Unknown Time")
+                            addEventToView(title, "$description alle $eventTime", "")
                         }
                     }
-
-                    // If no event was found, show a single "No events" line
-                    if (!foundEvent) {
-                        addEventToView("No events", "", "")
-                    }
+                } catch (e: JSONException) {
+                    Log.e("Parsing Error", "Failed to parse events: ${e.message}")
+                    addEventToView("Error", "Failed to parse events", "")
                 }
+            }
 
-                override fun onCancelled(error: DatabaseError) {
-                    Log.e("Firebase", "Failed to retrieve events", error.toException())
-                    addEventToView("Error", "Failed to load events", "")
-                }
-            })
+            override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
+                val errorMsg = "Network error: ${t.message}"
+                Log.e("Failure", errorMsg)
+                addEventToView("Error", errorMsg, "")
+            }
+        })
     }
 
     private fun addEventToView(title: String, description: String, date: String) {
@@ -129,8 +148,6 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
         val eventsContainer = findViewById<LinearLayout>(R.id.eventsContainer)
         eventsContainer.addView(eventTextView)
     }
-
-
 
     private fun readAllEvents() {
         eventsRef.addListenerForSingleValueEvent(object : ValueEventListener {
