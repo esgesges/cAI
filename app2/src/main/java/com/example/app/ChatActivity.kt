@@ -1,5 +1,6 @@
 package com.example.app
 
+import android.app.ActivityOptions
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
@@ -21,6 +22,7 @@ class ChatActivity : AppCompatActivity() {
 
     private lateinit var homebtn: Button
     private lateinit var optbtn: Button
+    private lateinit var notBtn: Button
     private lateinit var sendBtn: Button
     private lateinit var output: TextView
     private lateinit var input: EditText
@@ -38,6 +40,7 @@ class ChatActivity : AppCompatActivity() {
         // Initialize UI elements
         homebtn = findViewById(R.id.homebtn)
         optbtn = findViewById(R.id.optbtn)
+        notBtn = findViewById(R.id.notBtn)
         sendBtn = findViewById(R.id.sendBtn)
         output = findViewById(R.id.aiOutput)
         input = findViewById(R.id.aiInput)
@@ -48,15 +51,21 @@ class ChatActivity : AppCompatActivity() {
         // Home button click
         homebtn.setOnClickListener {
             val nextPage = Intent(this, MainActivity::class.java)
-            startActivity(nextPage)
+            val options = ActivityOptions.makeCustomAnimation(this, R.anim.slide_out_right, R.anim.slide_in_left)
+            startActivity(nextPage, options.toBundle())
         }
 
         // Options button click
         optbtn.setOnClickListener {
             val nextPage = Intent(this, DebugEventActivity::class.java)
-            startActivity(nextPage)
+            val options = ActivityOptions.makeCustomAnimation(this, R.anim.slide_out_left, R.anim.slide_in_right)
+            startActivity(nextPage, options.toBundle())
         }
 
+        notBtn.setOnClickListener {
+            val nextPage = Intent(this, OptActivity::class.java)
+            val options = ActivityOptions.makeCustomAnimation(this, R.anim.slide_out_right, R.anim.slide_in_left)
+            startActivity(nextPage, options.toBundle())        }
         // Send button click
         sendBtn.setOnClickListener {
             val userInput = input.text.toString().trim()

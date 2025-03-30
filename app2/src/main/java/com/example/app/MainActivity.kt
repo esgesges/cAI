@@ -1,6 +1,7 @@
 package com.example.app
 
 import RetrofitClient
+import android.app.ActivityOptions
 import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
@@ -11,8 +12,6 @@ import android.widget.CalendarView
 import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.marginStart
-import androidx.core.view.marginTop
 import com.example.app.db.CaiDatabase
 import com.example.app.db.Event
 import com.example.app.db.EventDao
@@ -27,12 +26,11 @@ import kotlinx.coroutines.withContext
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-import okhttp3.MediaType.Companion.toMediaTypeOrNull
-import okhttp3.RequestBody.Companion.toRequestBody
 import okhttp3.ResponseBody
 import org.json.JSONArray
 import org.json.JSONException
-import org.json.JSONObject
+import java.util.Calendar
+
 
 class MainActivity : AppCompatActivity(), View.OnClickListener {
 
@@ -48,11 +46,18 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
         setContentView(R.layout.activity_main)
         val chatbtn = findViewById<Button>(R.id.chatbtn)
         val optbtn = findViewById<Button>(R.id.optbtn)
+        val notBtn = findViewById<Button>(R.id.notBtn)
         val calendario = findViewById<CalendarView>(R.id.calendario)
         val eventsContainer = findViewById<LinearLayout>(R.id.eventsContainer)
         database = CaiDatabase.getInstance(this)
         dao = database.dao
 
+        val calendar = Calendar.getInstance()
+        val year = calendar.get(Calendar.YEAR)
+        val month = calendar.get(Calendar.MONTH) + 1 // Month is 0-based
+        val day = calendar.get(Calendar.DAY_OF_MONTH)
+
+        getEventsByDate(year, month, day)
         // Clear any events shown on startup
         eventsContainer.removeAllViews()
 
@@ -64,11 +69,18 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
 
         chatbtn.setOnClickListener {
             val nextPage = Intent(this, ChatActivity::class.java)
-            startActivity(nextPage)
+            val options = ActivityOptions.makeCustomAnimation(this, R.anim.slide_out_left, R.anim.slide_in_right)
+            startActivity(nextPage, options.toBundle())
         }
         optbtn.setOnClickListener {
+            val nextPage = Intent(this, DebugEventActivity::class.java)
+            val options = ActivityOptions.makeCustomAnimation(this, R.anim.slide_out_left, R.anim.slide_in_right)
+            startActivity(nextPage, options.toBundle())
+        }
+        notBtn.setOnClickListener {
             val nextPage = Intent(this, OptActivity::class.java)
-            startActivity(nextPage)
+            val options = ActivityOptions.makeCustomAnimation(this, R.anim.slide_out_left, R.anim.slide_in_right)
+            startActivity(nextPage, options.toBundle())
         }
     }
 
@@ -103,7 +115,8 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
                             val title = event.optString("Titolo", "No Title")
                             val description = event.optString("Descrizione", "No Description")
                             val eventTime = event.optString("Ora", "Unknown Time")
-                            addEventToView(title, "$description alle $eventTime", "")
+                            val date = event.optString("Data", "nessuna data")
+                            addEventToView(title, "$description alle $eventTime", date)
                         }
                     }
                 } catch (e: JSONException) {
@@ -126,7 +139,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
             text = if (title == "No events") {
                 "No events"
             } else {
-                "Titolo: $title\nDescrizione: $description\nData: $date"
+                "Titolo: $title\nDescrizione: $description"
             }
             textSize = 16f
             setPadding(32, 16, 32, 16)

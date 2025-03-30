@@ -1,9 +1,11 @@
 package com.example.app
 
+import android.app.ActivityOptions
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.View
+import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
@@ -28,30 +30,26 @@ internal class DebugEventActivity : AppCompatActivity(), View.OnClickListener {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_debug)
 
+        val notBtn = findViewById<Button>(R.id.notBtn)
+        val homeBtn = findViewById<Button>(R.id.homebtn)
+        val chatBtn = findViewById<Button>(R.id.chatbtn)
         // Lower menu to switch screens
-        findViewById<View>(R.id.homebtn).setOnClickListener { v: View? ->
-            startActivity(
-                Intent(
-                    this,
-                    DebugLayoutActivity::class.java
-                )
-            )
+        homeBtn.setOnClickListener {
+            val nextPage = Intent(this, MainActivity::class.java)
+            val options = ActivityOptions.makeCustomAnimation(this, R.anim.slide_out_right, R.anim.slide_in_left)
+            startActivity(nextPage, options.toBundle())
         }
-        findViewById<View>(R.id.chatbtn).setOnClickListener { v: View? ->
-            startActivity(
-                Intent(
-                    this,
-                    ChatActivity::class.java
-                )
-            )
+
+        notBtn.setOnClickListener {
+            val nextPage = Intent(this, OptActivity::class.java)
+            val options = ActivityOptions.makeCustomAnimation(this, R.anim.slide_out_right, R.anim.slide_in_left)
+            startActivity(nextPage, options.toBundle())
         }
-        findViewById<View>(R.id.optbtn).setOnClickListener { v: View? ->
-            startActivity(
-                Intent(
-                    this,
-                    OptActivity::class.java
-                )
-            )
+
+        chatBtn.setOnClickListener {
+            val nextPage = Intent(this, ChatActivity::class.java)
+            val options = ActivityOptions.makeCustomAnimation(this, R.anim.slide_out_right, R.anim.slide_in_left)
+            startActivity(nextPage, options.toBundle())
         }
 
         // Inputs
